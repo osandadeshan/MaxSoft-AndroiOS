@@ -1,6 +1,6 @@
-package com.maxsoft.maf.util;
+package com.maxsoft.androios.util;
 
-import com.maxsoft.maf.common.Base;
+import com.maxsoft.androios.common.Base;
 import com.thoughtworks.gauge.AfterSuite;
 import com.thoughtworks.gauge.BeforeSuite;
 import com.thoughtworks.gauge.Gauge;

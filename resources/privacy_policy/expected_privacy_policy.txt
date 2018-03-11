@@ -145,7 +145,7 @@
             </section>
             <section>
                 <h3>Web Analytics</h3>
-                <p>Pearson may use third party web trend analytical services, including Google Analytics and Adobe Analytics, to collect anonymous visitor information, which may include IP addresses, browser types, referring com.maxsoft.maf.pages, com.maxsoft.maf.pages visited and time
+                <p>Pearson may use third party web trend analytical services, including Google Analytics and Adobe Analytics, to collect anonymous visitor information, which may include IP addresses, browser types, referring com.maxsoft.androios.pages, com.maxsoft.androios.pages visited and time
                     spent on a particular site. While these analytical services collect and report information on an anonymous basis, they may use cookies and collect IP addresses to gather web trend information. Pearson uses web trend information for
                     system administration, identify problems and improve service. For further information about Google Analytics, and for links to Google's Privacy Policy and an opt-out tool for Google Analytics, go to <a href="http://www.google.com/intl/en/analytics/privacyoverview.html" target="_blank">http://www.google.com/intl/en/analytics/privacyoverview.html</a>. For further information about Adobe Analytics, for links to adobe Analytics' Privacy Policy and opt-out tool for Adobe Analytics, go to <a href="http://www.adobe.com/privacy/analytics.html" target="_blank">http://www.adobe.com/privacy/analytics.html</a>.</p>
             </section>

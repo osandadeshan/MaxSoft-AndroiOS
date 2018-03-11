@@ -1,12 +1,13 @@
-package com.maxsoft.maf.common;
+package com.maxsoft.androios.stepdefinitions;
 
+import com.maxsoft.androios.common.Base;
 import com.thoughtworks.gauge.Gauge;
 import com.thoughtworks.gauge.Step;
 import com.thoughtworks.gauge.Table;
 import com.thoughtworks.gauge.TableRow;
 import org.testng.Assert;
-import com.maxsoft.maf.util.DriverSetup;
-import com.maxsoft.maf.util.ToastMessage;
+import com.maxsoft.androios.util.DriverSetup;
+import com.maxsoft.androios.util.ToastMessage;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,27 +23,29 @@ public class CommonStepDefinitions {
     private static final String ANDROID = "android";
     private static final String IOS = "ios";
     private static Base baseObj = new Base();
-    String sheetName;
-    String elementName;
 
-    @Step("Testing platform information")
+    @Step("Configurations of the testing environment")
     public void platformInfo() {
-        if (PLATFORM.equals( ANDROID )) {
-            Gauge.writeMessage( "Targeted Platform: Android" );
-            Gauge.writeMessage( "Targeted Android Version: v" + DriverSetup.ANDROID_VERSION );
-            Gauge.writeMessage( "Targeted Android Device: " + DriverSetup.ANDROID_DEVICE_NAME );
-            Gauge.writeMessage( "Targeted Android App Package Name: " + DriverSetup.ANDROID_APP_PACKAGE );
-            Gauge.writeMessage( "Targeted Appium Host: " + DriverSetup.APPIUM_HOST );
-            Gauge.writeMessage( "Targeted Appium Port: " + DriverSetup.APPIUM_PORT );
-        } else if (PLATFORM.equals( IOS )) {
-            Gauge.writeMessage( "Targeted platform is: iOS" );
-            Gauge.writeMessage( "Targeted iOS Version: v" + DriverSetup.IOS_VERSION );
-            Gauge.writeMessage( "Targeted iOS Device: " + DriverSetup.IOS_DEVICE_NAME );
-            Gauge.writeMessage( "Targeted iOS App Package Name: " + DriverSetup.BUNDLE_ID );
-            Gauge.writeMessage( "Targeted Appium Host: " + DriverSetup.APPIUM_HOST );
-            Gauge.writeMessage( "Targeted Appium Port: " + DriverSetup.APPIUM_PORT );
-        } else {
-            Gauge.writeMessage( "Targeted platform is not supported" );
+        switch (PLATFORM) {
+            case ANDROID:
+                Gauge.writeMessage("Platform Name: Android");
+                Gauge.writeMessage("Android Version: v" + DriverSetup.ANDROID_VERSION);
+                Gauge.writeMessage("Android Device: " + DriverSetup.ANDROID_DEVICE_NAME);
+                Gauge.writeMessage("Android App Package Name: " + DriverSetup.ANDROID_APP_PACKAGE);
+                Gauge.writeMessage("Appium Server Host: " + DriverSetup.APPIUM_HOST);
+                Gauge.writeMessage("Appium Port: " + DriverSetup.APPIUM_PORT);
+                break;
+            case IOS:
+                Gauge.writeMessage("Platform Name: iOS");
+                Gauge.writeMessage("iOS Version: v" + DriverSetup.IOS_VERSION);
+                Gauge.writeMessage("iOS Device: " + DriverSetup.IOS_DEVICE_NAME);
+                Gauge.writeMessage("iOS App Package Name: " + DriverSetup.BUNDLE_ID);
+                Gauge.writeMessage("Appium Server Host: " + DriverSetup.APPIUM_HOST);
+                Gauge.writeMessage("Appium Port: " + DriverSetup.APPIUM_PORT);
+                break;
+            default:
+                Gauge.writeMessage("Targeted platform is not supported");
+                break;
         }
     }
 
@@ -51,7 +54,7 @@ public class CommonStepDefinitions {
         List<TableRow> rows = table.getTableRows();
         List<String> columnNames = table.getColumnNames();
         for (TableRow row : rows) {
-            baseObj.tapElement(row.getCell(columnNames.get(0)), row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)));
+            baseObj.tapElement(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)));
         }
     }
 
@@ -60,7 +63,7 @@ public class CommonStepDefinitions {
         List<TableRow> rows = table.getTableRows();
         List<String> columnNames = table.getColumnNames();
         for (TableRow row : rows) {
-            baseObj.setTextAs(row.getCell(columnNames.get(0)), row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)), row.getCell(columnNames.get(3)));
+            baseObj.setTextAs(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)), row.getCell(columnNames.get(3)));
         }
     }
 
@@ -70,11 +73,42 @@ public class CommonStepDefinitions {
         List<String> columnNames = table.getColumnNames();
         for (TableRow row : rows) {
             if (row.getCell(columnNames.get(3)).toLowerCase().equals("y") || row.getCell(columnNames.get(3)).toLowerCase().equals("yes")) {
-                baseObj.isElementVisible(row.getCell(columnNames.get(0)), row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)));
+                baseObj.isElementVisible(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)));
             } else {
-                baseObj.isElementNotVisible(row.getCell(columnNames.get(0)), row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)));
+                baseObj.isElementNotVisible(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)));
             }
 
+        }
+    }
+
+    @Step("Validate the elements' attributes on the screen <table>")
+    public void isElementAttributeEquals(Table table) throws IOException {
+        List<TableRow> rows = table.getTableRows();
+        List<String> columnNames = table.getColumnNames();
+        for (TableRow row : rows) {
+            String attributeName = row.getCell(columnNames.get(3)).toLowerCase();
+            switch (attributeName) {
+                case "name":
+                    baseObj.isElementAttributeValueEqualTo(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)), attributeName, row.getCell(columnNames.get(4)));
+                    break;
+
+                case "text":
+                    baseObj.isElementAttributeValueEqualTo(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)), attributeName, row.getCell(columnNames.get(4)));
+                    break;
+
+                case "value":
+                    baseObj.isElementAttributeValueEqualTo(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)), attributeName, row.getCell(columnNames.get(4)));
+                    break;
+
+                case "label":
+                    baseObj.isElementAttributeValueEqualTo(row.getCell(columnNames.get(1)), row.getCell(columnNames.get(2)), attributeName, row.getCell(columnNames.get(4)));
+                    break;
+
+                default: {
+                    baseObj.printText("Implementation for \"" + attributeName + "\" attribute is not currently available");
+                    break;
+                }
+            }
         }
     }
 

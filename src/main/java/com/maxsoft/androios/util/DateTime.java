@@ -1,4 +1,4 @@
-package com.maxsoft.maf.util;
+package com.maxsoft.androios.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.maxsoft.maf.common;
+package com.maxsoft.androios.common;
 
 import com.thoughtworks.gauge.Gauge;
 import com.thoughtworks.gauge.datastore.DataStore;
@@ -16,17 +16,17 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import com.maxsoft.maf.util.DriverSetup;
-import com.maxsoft.maf.util.FileReadWrite;
-import com.maxsoft.maf.util.ReadLocatorsFromExcel;
+import com.maxsoft.androios.util.DriverSetup;
+import com.maxsoft.androios.util.FileReadWrite;
+import com.maxsoft.androios.util.ReadLocatorsFromExcel;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-import static com.maxsoft.maf.util.DriverSetup.PROJECT_ROOT;
-import static com.maxsoft.maf.util.DriverSetup.androidDriver;
-import static com.maxsoft.maf.util.DriverSetup.iosDriver;
+import static com.maxsoft.androios.util.DriverSetup.PROJECT_ROOT;
+import static com.maxsoft.androios.util.DriverSetup.androidDriver;
+import static com.maxsoft.androios.util.DriverSetup.iosDriver;
 
 
 /**
@@ -141,12 +141,12 @@ public class Base {
         wait.until(ExpectedConditions.visibilityOf(getElement(sheetName, elementName)));
     }
 
-    public void tapElement(String optional, String sheetName, String elementName) throws IOException {
+    public void tapElement(String sheetName, String elementName) throws IOException {
         waitForElementVisible(sheetName, elementName);
         getElement(sheetName, elementName).click();
     }
 
-    public void setTextAs(String optional, String sheetName, String elementName, String text) throws IOException {
+    public void setTextAs(String sheetName, String elementName, String text) throws IOException {
         waitForElementClickable(sheetName, elementName);
         getElement(sheetName, elementName).sendKeys(text);
     }
@@ -226,7 +226,7 @@ public class Base {
 
     public void isElementAttributeValueEqualTo(String sheetName, String elementName, String attributeName, String attributeValue) throws IOException {
         Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Element cannot be found.");
-        Assert.assertEquals(getElement(sheetName, elementName).getAttribute(attributeName), attributeValue, "Element's attribute "+attributeName+" is mismatched.");
+        Assert.assertEquals(getElement(sheetName, elementName).getAttribute(attributeName), attributeValue, "Element's attribute \""+attributeName+"\" is mismatched.");
     }
 
     public void isElementValueEqualTo(String sheetName, String elementName, String attributeValue) throws IOException {
@@ -263,13 +263,13 @@ public class Base {
         }
     }
 
-    public void isElementVisible(String optional, String sheetName, String elementName) throws IOException {
-        Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Element cannot be found.");
+    public void isElementVisible(String sheetName, String elementName) throws IOException {
+        Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "\"" + elementName + "\"" + " Element cannot be found.");
     }
 
-    public void isElementNotVisible(String optional, String sheetName, String elementName) throws IOException {
+    public void isElementNotVisible(String sheetName, String elementName) throws IOException {
         try {
-            Assert.assertFalse(getElement(sheetName, elementName).isDisplayed(), "Element has found.");
+            Assert.assertFalse(getElement(sheetName, elementName).isDisplayed(), "\"" + elementName + "\"" + " Element has found");
             Assert.fail("\"" + elementName + "\"" + " Element has found");
         } catch (NoSuchElementException ex){
             ex.printStackTrace();
@@ -298,16 +298,16 @@ public class Base {
         }
     }
 
-    public static void saveValueForScenario(String variableNameOfValueToBeStoredInDataStore, String valueToBeStoredInDataStore) {
+    public static void saveValueForScenario(String variableName, String value) {
         // Adding value to the Data Store
         DataStore scenarioStore = DataStoreFactory.getScenarioDataStore();
-        scenarioStore.put(variableNameOfValueToBeStoredInDataStore, valueToBeStoredInDataStore);
+        scenarioStore.put(variableName, value);
     }
 
-    public static String getSavedValueForScenario(String variableNameOfValueStoredInDataStore) {
+    public static String getSavedValueForScenario(String variableName) {
         // Fetching Value from the Data Store
         DataStore scenarioStore = DataStoreFactory.getScenarioDataStore();
-        return (String) scenarioStore.get(variableNameOfValueStoredInDataStore);
+        return (String) scenarioStore.get(variableName);
     }
 
     public void scrollDown() {
@@ -324,7 +324,7 @@ public class Base {
         }
     }
 
-    public void verifyContent(String visibleText) {
+    public void isTextVisible(String visibleText) {
         if(PLATFORM.toLowerCase().equals(ANDROID)) {
             androidDriver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""+visibleText+"\").instance(0))");
         } else {

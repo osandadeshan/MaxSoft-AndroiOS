@@ -1,4 +1,4 @@
-package com.maxsoft.maf.util;
+package com.maxsoft.androios.util;
 
 import com.thoughtworks.gauge.Gauge;
 import org.testng.Assert;

@@ -1,4 +1,4 @@
-package com.maxsoft.maf.util;
+package com.maxsoft.androios.util;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static com.maxsoft.maf.util.GetCellAddressInExcel.baseObj;
+import static com.maxsoft.androios.util.GetCellAddressInExcel.baseObj;
 
 
 /**

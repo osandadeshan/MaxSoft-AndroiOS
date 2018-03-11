@@ -1,4 +1,4 @@
-package com.maxsoft.maf.util;
+package com.maxsoft.androios.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import com.aspose.ocr.ImageStream;
 import com.aspose.ocr.OcrEngine;
-import com.maxsoft.maf.common.Base;
+import com.maxsoft.androios.common.Base;
 import static org.bytedeco.javacpp.lept.pixDestroy;
 import static org.bytedeco.javacpp.lept.pixRead;
 import org.bytedeco.javacpp.lept.PIX;
