@@ -38,15 +38,15 @@ Verify that a valid user can login to the application
 * Tap the element
     |Step Name                                              |Sheet Name             |Element Name       |
     |-------------------------------------------------------|-----------------------|-------------------|
-    |Tap on Sign in button                                  |LoginPage              |btn_sign_in        |
+    |Tap on Sign In button                                  |LoginPage              |btn_sign_in        |
 * Tap the element
     |Step Name                                              |Sheet Name             |Element Name       |
     |-------------------------------------------------------|-----------------------|-------------------|
-    |Tap on Sign in button                                  |WelcomeFlowPage        |btn_skip           |
+    |Tap on Skip button                                     |WelcomeFlowPage        |btn_skip           |
 * Tap the element
     |Step Name                                              |Sheet Name             |Element Name       |
     |-------------------------------------------------------|-----------------------|-------------------|
-    |Tap on Sign in button                                  |WelcomeFlowPage        |btn_got_it         |
+    |Tap on Got It button                                   |WelcomeFlowPage        |btn_got_it         |
 * Validate the elements' attributes on the screen
     |Step Name                                              |Sheet Name             |Element Name       |Attribute Name   |Expected Attribute Value     |
     |-------------------------------------------------------|-----------------------|-------------------|-----------------|-----------------------------|
