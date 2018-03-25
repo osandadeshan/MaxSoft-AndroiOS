@@ -39,15 +39,9 @@ Verify that a valid user can login to the application
     |Step Name                                              |Sheet Name             |Element Name       |
     |-------------------------------------------------------|-----------------------|-------------------|
     |Tap on Sign In button                                  |LoginPage              |btn_sign_in        |
-* Tap the element
-    |Step Name                                              |Sheet Name             |Element Name       |
-    |-------------------------------------------------------|-----------------------|-------------------|
     |Tap on Skip button                                     |WelcomeFlowPage        |btn_skip           |
-* Tap the element
-    |Step Name                                              |Sheet Name             |Element Name       |
-    |-------------------------------------------------------|-----------------------|-------------------|
     |Tap on Got It button                                   |WelcomeFlowPage        |btn_got_it         |
 * Validate the elements' attributes on the screen
     |Step Name                                              |Sheet Name             |Element Name       |Attribute Name   |Expected Attribute Value     |
     |-------------------------------------------------------|-----------------------|-------------------|-----------------|-----------------------------|
-    |Verify that the page title is "Expert Decks"           |CommonLocators         |toolbar            |name             |Expert Decks                 |
+    |Page title is "Expert Decks"                           |CommonLocators         |toolbar            |name             |Expert Decks                 |

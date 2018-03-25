@@ -21,12 +21,16 @@ import com.maxsoft.androios.util.FileReadWrite;
 import com.maxsoft.androios.util.ReadLocatorsFromExcel;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.*;
 import java.util.List;
 
 import static com.maxsoft.androios.util.DriverSetup.PROJECT_ROOT;
 import static com.maxsoft.androios.util.DriverSetup.androidDriver;
 import static com.maxsoft.androios.util.DriverSetup.iosDriver;
+import static jdk.nashorn.internal.objects.Global.println;
 
 
 /**
@@ -52,7 +56,6 @@ public class Base {
             switch (ReadLocatorsFromExcel.getIosHow(sheetName, elementName).toLowerCase()) {
                 case "id":
                     element = iosDriver.findElement(By.id(ReadLocatorsFromExcel.getIosLocator(sheetName, elementName)));
-                    System.out.println((ReadLocatorsFromExcel.getIosLocator(sheetName, elementName)));
                     return element;
                 case "xpath":
                     element = iosDriver.findElement(By.xpath(ReadLocatorsFromExcel.getIosLocator(sheetName, elementName)));
@@ -83,7 +86,6 @@ public class Base {
             switch (ReadLocatorsFromExcel.getAndroidHow(sheetName, elementName).toLowerCase()) {
                 case "id":
                     element = androidDriver.findElement(By.id(ReadLocatorsFromExcel.getAndroidLocator(sheetName, elementName)));
-                    System.out.println((ReadLocatorsFromExcel.getAndroidLocator(sheetName, elementName)));
                     return element;
                 case "xpath":
                     element = androidDriver.findElement(By.xpath(ReadLocatorsFromExcel.getAndroidLocator(sheetName, elementName)));
@@ -185,7 +187,7 @@ public class Base {
             if (PLATFORM.toLowerCase().equals(IOS.toLowerCase())){
                 iosDriver.hideKeyboard();
             } else {
-                androidDriver().hideKeyboard();
+                androidDriver.hideKeyboard();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,23 +197,13 @@ public class Base {
     public void showKeyboard(){
         try {
             if (PLATFORM.toLowerCase().equals(IOS.toLowerCase())){
-
+                iosDriver.getKeyboard();
             } else {
-
+                androidDriver.getKeyboard();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void isFailed(String sheetName, String elementName, String expectedPageTitle) throws IOException {
-        Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Page title locator is invalid.");
-        Assert.assertTrue(getElement(sheetName, elementName).getAttribute("name").equals(expectedPageTitle), "Expected result is not obtained");
-    }
-
-    public void isSuccess(String sheetName, String elementName, String expectedPageTitle) throws IOException {
-        Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Page title locator is invalid.");
-        Assert.assertTrue(getElement(sheetName, elementName).getAttribute("name").equals(expectedPageTitle), "Expected result is not obtained");
     }
 
     public void isPageTitleEqualTo(String sheetName, String elementName, String expectedPageTitle) throws IOException {
@@ -224,11 +216,6 @@ public class Base {
         Assert.assertEquals(getElement(sheetName, elementName).getAttribute("name"), elementText, "Element text mismatched.");
     }
 
-    public void isElementAttributeValueEqualTo(String sheetName, String elementName, String attributeName, String attributeValue) throws IOException {
-        Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Element cannot be found.");
-        Assert.assertEquals(getElement(sheetName, elementName).getAttribute(attributeName), attributeValue, "Element's attribute \""+attributeName+"\" is mismatched.");
-    }
-
     public void isElementValueEqualTo(String sheetName, String elementName, String attributeValue) throws IOException {
         Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Element cannot be found.");
         Assert.assertEquals(getElement(sheetName, elementName).getAttribute("value"), attributeValue, "Element's value is mismatched.");
@@ -237,6 +224,19 @@ public class Base {
     public void isElementLabelEqualTo(String sheetName, String elementName, String attributeValue) throws IOException {
         Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Element cannot be found.");
         Assert.assertEquals(getElement(sheetName, elementName).getAttribute("label"), attributeValue, "Element's value is mismatched.");
+    }
+
+    public void isElementAccessibilityIdEquals(String sheetName, String elementName, String elementText) throws IOException {
+        Assert.assertEquals(getElement(sheetName, elementName).getAttribute("name"), elementText, "Element text mismatched.");
+    }
+
+    public void isElementTextEquals(String sheetName, String elementName, String elementText) throws IOException {
+        Assert.assertEquals(getElement(sheetName, elementName).getAttribute("text"), elementText, "Element text mismatched.");
+    }
+
+    public void isElementAttributeValueEqualTo(String sheetName, String elementName, String attributeName, String attributeValue) throws IOException {
+        Assert.assertTrue(getElement(sheetName, elementName).isDisplayed(), "Element cannot be found.");
+        Assert.assertEquals(getElement(sheetName, elementName).getAttribute(attributeName), attributeValue, "Element's attribute \""+attributeName+"\" is mismatched.");
     }
 
     public void isButtonVisible(String sheetName, String elementName) throws IOException {
@@ -276,20 +276,7 @@ public class Base {
         }
     }
 
-    public void verifyElementAccessibilityIdTextIsVisibleAs(String sheetName, String elementName, String elementText) throws IOException {
-        Assert.assertEquals(getElement(sheetName, elementName).getAttribute("name"), elementText, "Element text mismatched.");
-    }
-
-//    public void verifyElementTextIsVisibleAs(String sheetName, String elementName, String elementText) throws IOException {
-//        Assert.assertEquals(getElement(sheetName, elementName).getAttribute("text"), elementText, "Element text mismatched.");
-//    }
-
-    public void isElementTextEquals(String sheetName, String elementName, String elementText) throws IOException {
-        String actualTextInElement = getElement(sheetName, elementName).getAttribute("text");
-        Assert.assertEquals(actualTextInElement, elementText, "Element text mismatched.");
-    }
-
-    public void verifyElementTextIsNotVisible(String sheetName, String elementName, String elementText) throws IOException {
+    public void isElementTextNotEquals(String sheetName, String elementName, String elementText) throws IOException {
         try{
             scrollTo(elementText);
             Assert.fail("\"" + elementText + "\"" + " Element has found");
@@ -465,7 +452,7 @@ public class Base {
         }
     }
 
-    public void verifyElementIsEnable(String sheetName, String elementName, boolean isEnable) throws IOException {
+    public void isElementEnable(String sheetName, String elementName, boolean isEnable) throws IOException {
         if (getElement(sheetName, elementName).isEnabled() == Boolean.TRUE) {
             System.out.println("Element is enabled");
             Gauge.writeMessage("Element is enabled");
@@ -511,28 +498,18 @@ public class Base {
         }
     }
 
-    public void setDatePickerAndroid(String sheetName, String datePicker, String dateElement, String examDate, String datePickerOkButton) throws IOException {
-        waitForElementClickable(sheetName, datePicker);
-        getElement(sheetName, datePicker).click();
-        replaceXpathContentAndClickElement(sheetName, dateElement, "examDate", examDate);
-        waitForElementClickable(sheetName, datePickerOkButton);
-        getElement(sheetName, datePickerOkButton).click();
+    // Pass monthName param as "August"
+    public int getMonthNumber(String monthName) throws ParseException {
+        Date date = new SimpleDateFormat("MMMM").parse(monthName);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        System.out.println(calendar.get(Calendar.MONTH) + 1);
+        return calendar.get(Calendar.MONTH) + 1;
     }
 
-    public void setTimePickerAndroid(String sheetName, String timePicker, String amButton, String pmButton, String hour, String minutes, String amPm, String timePickerOkButton) throws IOException {
-        waitForElementClickable(sheetName, timePicker);
-        getElement(sheetName, timePicker).click();
-        getDriver().findElementByAccessibilityId(hour).click();
-        getDriver().findElementByAccessibilityId(minutes).click();
-        if (amPm.toLowerCase().equals("am")){
-            waitForElementClickable(sheetName, amButton);
-            getElement(sheetName, amButton).click();
-        } else if (amPm.toLowerCase().equals("pm")) {
-            waitForElementClickable(sheetName, pmButton);
-            getElement(sheetName, pmButton).click();
-        }
-        waitForElementClickable(sheetName, timePickerOkButton);
-        getElement(sheetName, timePickerOkButton).click();
+    // Pass date param as "Sun, Jul 1"
+    public String getMonthNameInThreeChars(String date) {
+        return date.substring(5, 8);
     }
 
     public void freeze(int seconds){
@@ -549,19 +526,6 @@ public class Base {
         } else {
             iosDriver.navigate().back();
         }
-    }
-
-    public void setDatePickerIOS(){
-        ((IOSElement)iosDriver.findElements(By.className("UIAPickerWheel")).get(0)).sendKeys("Sun 25 Jan");
-        MobileElement el1 = (MobileElement) getDriver().findElementByAccessibilityId("examDate");
-        el1.click();
-        MobileElement el2 = (MobileElement) getDriver().findElements(By.className("UIAPickerWheel")).get(0);
-        el2.sendKeys("December");
-        MobileElement el3 = (MobileElement) getDriver().findElementByXPath("//XCUIElementTypeApplication[@name=\"SmartFlashcards\"]/XCUIElementTypeWindow[4]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeDatePicker/XCUIElementTypeOther/XCUIElementTypePickerWheel[2]");
-        el3.click();
-        el3.sendKeys("30");
-        MobileElement el4 = (MobileElement) getDriver().findElementByXPath("//XCUIElementTypeApplication[@name=\"SmartFlashcards\"]/XCUIElementTypeWindow[4]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeDatePicker/XCUIElementTypeOther/XCUIElementTypePickerWheel[3]");
-        el4.sendKeys("2006");
     }
 
     public void printText(String text){

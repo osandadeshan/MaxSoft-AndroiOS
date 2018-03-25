@@ -1,6 +1,7 @@
 package com.maxsoft.androios.stepdefinitions;
 
 import com.maxsoft.androios.common.Base;
+import com.maxsoft.androios.common.CommonLocators;
 import com.thoughtworks.gauge.Gauge;
 import com.thoughtworks.gauge.Step;
 import com.thoughtworks.gauge.Table;
@@ -9,7 +10,10 @@ import org.testng.Assert;
 import com.maxsoft.androios.util.DriverSetup;
 import com.maxsoft.androios.util.ToastMessage;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
+import static com.maxsoft.androios.common.CommonLocators.COMMON_LOCATORS;
+import static com.maxsoft.androios.common.CommonLocators.TOOL_BAR;
 
 
 /**
@@ -22,7 +26,8 @@ public class CommonStepDefinitions {
     private static final String PLATFORM = DriverSetup.PLATFORM.toLowerCase();
     private static final String ANDROID = "android";
     private static final String IOS = "ios";
-    private static Base baseObj = new Base();
+    private Base baseObj = new Base();
+    private CommonLocators commonLocators = new CommonLocators();
 
     @Step("Configurations of the testing environment")
     public void platformInfo() {
@@ -112,10 +117,10 @@ public class CommonStepDefinitions {
         }
     }
 
-    @Step("Verify that the toast message is <toastMessage>")
+    @Step("Toast message is <toastMessage>")
     public void verifyToastMessage(String toastMessage) throws Exception {
         //Assert.assertTrue(ToastMessage.getToastMessage().contains(toastMessage), "Invalid Toast Message");
-        Assert.assertEquals( ToastMessage.getToastMessageContent(), toastMessage, "Invalid toast message!" );
+        Assert.assertEquals(ToastMessage.getToastMessageContent(), toastMessage, "Invalid toast message!" );
     }
 
     @Step("Wait <seconds> seconds")
@@ -123,10 +128,30 @@ public class CommonStepDefinitions {
         Thread.sleep( seconds * 1000 );
     }
 
-    @Step("Verify that the page title is <pageTitle>")
-    public void verifyPageTitle(String pageTitle) throws IOException {
-        if (PLATFORM.equals( ANDROID )) {
-//            baseObj.isPageTitleEqualTo(SETTINGS_PAGE, SETTINGS_TITLE_TEXTVIEW, pageTitle);
+    @Step("Page title is <pageTitle>")
+    public void isPageTitleEquals(String pageTitle) throws IOException {
+        if (PLATFORM.equals(ANDROID)) {
+            baseObj.isPageTitleEqualTo(COMMON_LOCATORS, TOOL_BAR, pageTitle);
+        } else {
+            Assert.assertTrue(commonLocators.getIOSPageTitleElement(pageTitle).isDisplayed());
+        }
+    }
+
+    @Step("Set date as <date>")
+    public void setDate(String date) throws IOException, ParseException {
+        if (PLATFORM.equals(ANDROID)) {
+            commonLocators.setDateForAndroidDatePicker(date);
+        } else {
+
+        }
+    }
+
+    @Step("Set time as <time>")
+    public void setTime(String time) throws IOException, ParseException {
+        if (PLATFORM.equals(ANDROID)) {
+            commonLocators.setTimeForAndroidTimePicker(time);
+        } else {
+
         }
     }
 
@@ -157,7 +182,7 @@ public class CommonStepDefinitions {
 
     @Step("Scroll to the text of <text>")
     public void scrollTo(String text) throws InterruptedException {
-        baseObj.scrollTo( text );
+        baseObj.scrollTo(text);
     }
 
     @Step("Navigate back from the device")
@@ -165,23 +190,23 @@ public class CommonStepDefinitions {
         baseObj.navigateBackFromDevice();
     }
 
-    @Step("Verify the webview contains <text>")
+    @Step("WebView contains <text>")
     public void isWebViewTextEquals(String text) throws InterruptedException {
-        baseObj.isWebViewTextEquals( text );
+        baseObj.isWebViewTextEquals(text);
     }
 
-    @Step("Verify the webview contains the following text <table>")
+    @Step("WebView contains <table>")
     public void isWebViewTextEquals(Table table) throws InterruptedException {
         List<TableRow> rows = table.getTableRows();
         List<String> columnNames = table.getColumnNames();
         for (TableRow row : rows) {
-            baseObj.isWebViewTextEquals( row.getCell( columnNames.get( 0 ) ) );
+            baseObj.isWebViewTextEquals(row.getCell(columnNames.get(0)));
         }
     }
 
     @Step("Tap on <text>")
     public void tapOnVisibleText(String text) {
-        baseObj.scrollAndClick( text );
+        baseObj.scrollAndClick(text);
     }
 
     @Step("Press Enter button on the Keyboard")
@@ -196,7 +221,7 @@ public class CommonStepDefinitions {
 
     @Step("Show keyboard")
     public void showKeyboard() {
-        baseObj.hideKeyboard();
+        baseObj.showKeyboard();
     }
 
     @Step("Quit from the application")
